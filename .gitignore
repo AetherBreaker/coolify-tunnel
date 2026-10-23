@@ -1,0 +1,3 @@
+# The host key pair; the .key goes into Coolify as TUNNEL_SSH_HOST_KEY_B64 (base64). Never commit it.
+/coolify-tunnel.key
+/coolify-tunnel.pub

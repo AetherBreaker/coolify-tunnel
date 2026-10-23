@@ -1,0 +1,4 @@
+# The registry of every device Coolify reaches through this tunnel: one line per device, with a
+# comment above it naming the device and its project. Each device's line is printed by its setup:
+#   restrict,port-forwarding,permitlisten="0.0.0.0:<port>" ssh-ed25519 AAAA... <hostname>-tunnel
+# Ports start at 22001; take the next free one. Commit, push, redeploy.

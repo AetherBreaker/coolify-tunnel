@@ -1,0 +1,19 @@
+services:
+  # Devices dial port 2223; Coolify reaches each device at coolify-tunnel:<its port> over the
+  # coolify network. The host key comes from a Coolify secret.
+  coolify-tunnel:
+    container_name: coolify-tunnel
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    environment:
+      - TUNNEL_SSH_HOST_KEY_B64=${TUNNEL_SSH_HOST_KEY_B64:?}
+    ports:
+      - "2223:22"
+    networks:
+      - coolify
+
+networks:
+  coolify:
+    external: true
