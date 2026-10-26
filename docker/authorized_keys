@@ -4,4 +4,4 @@
 # Ports start at 22001; take the next free one. Commit, push, redeploy.
 
 # 22001: timeclock-dev, the timeclock-system test device (HP EliteDesk 800 G3 Mini)
-restrict,port-forwarding,permitlisten="0.0.0.0:22001" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGn++JzTtIoPvhmEjJOGECzDceDBD5HN3VaqNp0BoThx timeclock-dev-tunnel
+restrict,port-forwarding,permitlisten="0.0.0.0:22001" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJIFGnHLWiEbMiGGzTUeqGZBxFF1ciAj54UzLbPfAczF timeclock-dev-tunnel
