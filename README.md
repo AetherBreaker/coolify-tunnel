@@ -1,6 +1,6 @@
 # coolify-tunnel
 
-Lets Coolify on the VPS deploy to devices behind NAT, which it can't reach directly. Each device keeps an outbound SSH connection to this container (port **2223**) and opens one reverse forward to its own SSH server. Coolify then reaches the device at `coolify-tunnel:<port>` over the `coolify` network. Nothing is configured on the VPS host.
+Lets Coolify on the VPS deploy to devices behind NAT, which it can't reach directly. Each device keeps an outbound SSH connection to this container (port **2223**) and opens one reverse forward to its own SSH server. Coolify then reaches the device at `<hostname>-tunnel:<port>` over the `coolify` network: each device has its own alias for this container in `docker/compose.yaml`, since Coolify allows only one server per address, whatever the port. Nothing is configured on the VPS host.
 
 It's a forwarding-only `sshd`. A device's key may open only its own port: no shell, no local forwards, no other port.
 
