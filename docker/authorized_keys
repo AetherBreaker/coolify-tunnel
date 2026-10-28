@@ -5,3 +5,6 @@
 
 # 22001: timeclock-dev, the timeclock-system test device (HP EliteDesk 800 G3 Mini)
 restrict,port-forwarding,permitlisten="0.0.0.0:22001" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJIFGnHLWiEbMiGGzTUeqGZBxFF1ciAj54UzLbPfAczF timeclock-dev-tunnel
+
+# 22002: timeclock-system-main-office, a timeclock-system clock (clock 1)
+restrict,port-forwarding,permitlisten="0.0.0.0:22002" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5gZgccbIeY4Gbvdp52tWvGkTMPoPEpmUlV2X1mkavE timeclock-system-main-office-tunnel
