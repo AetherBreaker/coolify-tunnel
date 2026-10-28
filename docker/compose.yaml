@@ -1,7 +1,7 @@
 services:
-  # Devices dial port 2223; Coolify reaches each device at <hostname>-tunnel:<its port> over the
-  # coolify network: one alias per device, since Coolify allows one server per address whatever
-  # the port. The host key comes from a Coolify secret.
+  # Devices dial port 2223; Coolify reaches each device at <hostname>-tunnel:<its port>, which an
+  # ssh rule in Coolify's own container maps to this container (README). The host key comes from
+  # a Coolify secret.
   coolify-tunnel:
     container_name: coolify-tunnel
     build:
@@ -13,10 +13,7 @@ services:
     ports:
       - "2223:22"
     networks:
-      coolify:
-        aliases:
-          - timeclock-dev-tunnel
-          - timeclock-system-main-office-tunnel
+      - coolify
 
 networks:
   coolify:

@@ -1,6 +1,6 @@
 # coolify-tunnel
 
-Lets Coolify on the VPS deploy to devices behind NAT, which it can't reach directly. Each device keeps an outbound SSH connection to this container (port **2223**) and opens one reverse forward to its own SSH server. Coolify then reaches the device at `<hostname>-tunnel:<port>` over the `coolify` network: each device has its own alias for this container in `docker/compose.yaml`, since Coolify allows only one server per address, whatever the port. Nothing is configured on the VPS host.
+Lets Coolify on the VPS deploy to devices behind NAT, which it can't reach directly. Each device keeps an outbound SSH connection to this container (port **2223**) and opens one reverse forward to its own SSH server. Coolify then reaches the device at `<hostname>-tunnel:<port>` over the `coolify` network. Coolify allows only one server per address, whatever the port, so each device gets its own name, and one ssh rule in Coolify's own container maps every `*-tunnel` name to this container (see [Coolify's ssh rule](#coolifys-ssh-rule)). Nothing is configured on the VPS host.
 
 It's a forwarding-only `sshd`. A device's key may open only its own port: no shell, no local forwards, no other port.
 
@@ -48,3 +48,25 @@ Then:
 
 2. Commit, push, and redeploy in Coolify.
 3. In Coolify, add a server at `coolify-tunnel`, port `<port>`, user `root`, with a key whose public half is in the device's `/root/.ssh/authorized_keys`.
+
+## Coolify's ssh rule
+
+Once per VPS. Coolify's ssh reads `/etc/ssh/ssh_config.d/*.conf`, so this file, mounted into Coolify's container, sends
+every `<anything>-tunnel` address here; the port picks the device:
+
+```
+# /data/coolify/ssh_config.d/coolify-tunnel.conf (root, 644)
+Host *-tunnel
+  HostName coolify-tunnel
+```
+
+```yaml
+# /data/coolify/source/docker-compose.custom.yml (Coolify's upgrade script includes it)
+services:
+  coolify:
+    volumes:
+      - /data/coolify/ssh_config.d/coolify-tunnel.conf:/etc/ssh/ssh_config.d/coolify-tunnel.conf:ro
+```
+
+Apply it by recreating Coolify's container with its compose files at the running version, from `/data/coolify/source`:
+`LATEST_IMAGE=<version> docker compose --env-file .env -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.custom.yml up -d --no-deps coolify`.

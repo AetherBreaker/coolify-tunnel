@@ -1,8 +1,8 @@
 # The registry of every device Coolify reaches through this tunnel: one line per device, with a
 # comment above it naming the device and its project. Each device's line is printed by its setup:
 #   restrict,port-forwarding,permitlisten="0.0.0.0:<port>" ssh-ed25519 AAAA... <hostname>-tunnel
-# Ports start at 22001; take the next free one. Add <hostname>-tunnel to the aliases in compose.yaml.
-# Commit, push, redeploy.
+# Ports start at 22001; take the next free one. Commit, push, redeploy. In Coolify the device's server is
+# <hostname>-tunnel:<port> (README, Coolify's ssh rule).
 
 # 22001: timeclock-dev, the timeclock-system test device (HP EliteDesk 800 G3 Mini)
 restrict,port-forwarding,permitlisten="0.0.0.0:22001" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJIFGnHLWiEbMiGGzTUeqGZBxFF1ciAj54UzLbPfAczF timeclock-dev-tunnel
