@@ -11,4 +11,4 @@ restrict,port-forwarding,permitlisten="0.0.0.0:22001" ssh-ed25519 AAAAC3NzaC1lZD
 restrict,port-forwarding,permitlisten="0.0.0.0:22002" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5gZgccbIeY4Gbvdp52tWvGkTMPoPEpmUlV2X1mkavE timeclock-system-main-office-tunnel
 
 # 22003: timeclock-system-main-warehouse, a timeclock-system clock (clock 2)
-restrict,port-forwarding,permitlisten="0.0.0.0:22003" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFDcZB/+44hqVtwdIT8bAGQQT6xmIkHccUYnq4Hwj4Ie timeclock-system-main-warehouse-tunnel
+restrict,port-forwarding,permitlisten="0.0.0.0:22003" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC11fc85ngVeTpQDoLJNzpLzhgqjjR+9cbgLEQnkJ9PJ timeclock-system-main-warehouse-tunnel
