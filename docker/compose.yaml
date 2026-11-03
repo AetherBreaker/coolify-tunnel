@@ -12,6 +12,11 @@ services:
       - TUNNEL_SSH_HOST_KEY_B64=${TUNNEL_SSH_HOST_KEY_B64:?}
     ports:
       - "2223:22"
+    # TCP gives up after ~100 s of unanswered sends (Linux's default, 15 retries, takes ~15 min). sshd's ClientAlive
+    # only probes after 30 s with no activity at all on a session, and Coolify's keepalives and reconnects through a
+    # dead device's port are activity: without this, the dead session holds the port and refuses the device for minutes.
+    sysctls:
+      - net.ipv4.tcp_retries2=8
     networks:
       - coolify
 
