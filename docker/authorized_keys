@@ -5,7 +5,7 @@
 # <hostname>-tunnel:<port> (README, Coolify's ssh rule).
 
 # 22001: timeclock-system-dev, the timeclock-system test clock (clock 99, HP EliteDesk 800 G3 Mini)
-restrict,port-forwarding,permitlisten="0.0.0.0:22001" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJIFGnHLWiEbMiGGzTUeqGZBxFF1ciAj54UzLbPfAczF timeclock-system-dev-tunnel
+restrict,port-forwarding,permitlisten="0.0.0.0:22001" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDkOZfTsfoiD+Ey7QZJDNR7Ah1iKHL22I0br90FB9bUP timeclock-system-dev-tunnel
 
 # 22002: timeclock-system-main-office, a timeclock-system clock (clock 1)
 restrict,port-forwarding,permitlisten="0.0.0.0:22002" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGQTqA6kUDZ+KahYiJj9r+ZcfbHCy1iNT7t+is9gPzq5 timeclock-system-main-office-tunnel
