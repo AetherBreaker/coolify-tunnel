@@ -14,7 +14,17 @@ It's a forwarding-only `sshd`. A device's key may open only its own port: no she
    ```
 
    The repository ignores `coolify-tunnel.key` and `coolify-tunnel.pub` in its root.
-2. **Create the application in Coolify:** a Docker Compose application from this repository, branch `main`, compose file `docker/compose.yaml`. Add the clipboard's contents as the secret `TUNNEL_SSH_HOST_KEY_B64`, then deploy.
+2. **Create the application in Coolify:** a Dockerfile application from this repository, branch `main`, base directory `/`, Dockerfile `/docker/Dockerfile`, with:
+   - ports exposed `22`, port mapping `2223:22`;
+   - network aliases `coolify-tunnel` plus every device's `<hostname>-tunnel` (see [Device names](#device-names));
+   - custom docker options `--sysctl net.ipv4.tcp_retries2=8`: TCP then gives up on unanswered sends after ~100 s
+     (Linux's default, 15 retries, takes ~15 min). sshd's ClientAlive only probes after 30 s with no activity on a
+     session, and Coolify's keepalives and reconnects through a dead device's port are activity, so without it a dead
+     session holds the port and refuses the device for minutes;
+   - the clipboard's contents as the runtime-only secret `TUNNEL_SSH_HOST_KEY_B64` (not build-time: the Dockerfile
+     doesn't need it).
+
+   Then deploy. Not Docker Compose: Coolify discards a compose file's network aliases.
 3. **The log** prints `coolify-tunnel host key: 256 SHA256:...` at every start. Devices compare against it when they set up their tunnel.
 
 Port 2223 is published by Docker, which bypasses `ufw` on the VPS. A firewall in the hosting provider's panel would still need to allow it.
@@ -40,7 +50,7 @@ ssh -N -p 2223 -i /etc/coolify-tunnel/key -o UserKnownHostsFile=/etc/coolify-tun
 
 Then:
 
-1. Add the device's line to [`docker/authorized_keys`](docker/authorized_keys), with a comment naming the device and its project, and `<hostname>-tunnel` to the aliases in [`docker/compose.yaml`](docker/compose.yaml). The next free port starts at 22001.
+1. Add the device's line to [`docker/authorized_keys`](docker/authorized_keys), with a comment naming the device and its project, and `<hostname>-tunnel` to the application's network aliases in Coolify. The next free port starts at 22001.
 
    ```text
    restrict,port-forwarding,permitlisten="0.0.0.0:<port>" ssh-ed25519 AAAA... <hostname>-tunnel
@@ -51,8 +61,8 @@ Then:
 
 ## Device names
 
-Each `<hostname>-tunnel` is a network alias of this container on the `coolify` network, so Docker's DNS resolves it for
-Coolify. Until 2026-11-11 an ssh rule in Coolify's container (`Host *-tunnel` / `HostName coolify-tunnel`, mounted from
-`/data/coolify/ssh_config.d/` by `/data/coolify/source/docker-compose.custom.yml`) mapped every such name here instead;
-Coolify 4.7.5 runs ssh with `-F /dev/null`, which skips it, and every device deploy failed with "Could not resolve
-hostname". The rule is still mounted, unused.
+Each `<hostname>-tunnel` is a network alias of this container on the `coolify` network (Coolify's Network Aliases
+setting), so Docker's DNS resolves it for Coolify. Until 2026-11-11 an ssh rule in Coolify's container (`Host *-tunnel` /
+`HostName coolify-tunnel`, mounted from `/data/coolify/ssh_config.d/` by `/data/coolify/source/docker-compose.custom.yml`)
+mapped every such name here; Coolify 4.7.0 and later run ssh with `-F /dev/null` (security hardening, coollabsio/coolify
+#12420), which skips it. The rule is still mounted, unused.
